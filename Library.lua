@@ -377,6 +377,15 @@ function Library:RemoveFromRegistry(Instance)
         Library.RegistryMap[Instance] = nil;
     end;
 end;
+function Library:AdjustForDevice()
+    if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
+        local scale = Instance.new("UIScale")
+        scale.Scale = 0.85
+        scale.Parent = Library.ScreenGui
+    end
+end
+
+Library:AdjustForDevice()
 
 function Library:UpdateColorsUsingRegistry()
     -- TODO: Could have an 'active' list of objects

@@ -2908,7 +2908,8 @@ function Library:CreateWindow(...)
     local UserInputService = game:GetService("UserInputService")
     local isMobile = UserInputService.TouchEnabled and not (UserInputService.MouseEnabled or UserInputService.KeyboardEnabled)
     if typeof(Config.Size) ~= 'UDim2' then 
-        Config.Size = isMobile and UDim2.fromOffset(420, 420) or UDim2.fromOffset(460, 540)
+        Config.Size = isMobile and UDim2.fromScale(0.9, 0.7) or UDim2.fromOffset(460, 540)
+    end
     end
 
     if Config.Center then

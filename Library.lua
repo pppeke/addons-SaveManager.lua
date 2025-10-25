@@ -161,59 +161,33 @@ function Library:CreateLabel(Properties, IsHud)
     return Library:Create(_Instance, Properties);
 end;
 
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
+function Library:MakeDraggable(Instance, Cutoff)
+    Instance.Active = true;
 
-function Library:MakeDraggable(instance, cutoff)
-	instance.Active = true
-	cutoff = cutoff or 40
+    Instance.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            local ObjPos = Vector2.new(
+                Mouse.X - Instance.AbsolutePosition.X,
+                Mouse.Y - Instance.AbsolutePosition.Y
+            );
 
-	local dragging = false
-	local dragStart
-	local startPos
+            if ObjPos.Y > (Cutoff or 40) then
+                return;
+            end;
 
-	local function update(input)
-		local delta = input.Position - dragStart
-		instance.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
-		)
-	end
+            while InputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
+                Instance.Position = UDim2.new(
+                    0,
+                    Mouse.X - ObjPos.X + (Instance.Size.X.Offset * Instance.AnchorPoint.X),
+                    0,
+                    Mouse.Y - ObjPos.Y + (Instance.Size.Y.Offset * Instance.AnchorPoint.Y)
+                );
 
-	instance.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			local objPos = Vector2.new(
-				input.Position.X - instance.AbsolutePosition.X,
-				input.Position.Y - instance.AbsolutePosition.Y
-			)
-
-			if objPos.Y > cutoff then
-				return
-			end
-
-			dragging = true
-			dragStart = input.Position
-			startPos = instance.Position
-
-			local conn
-			conn = input.Changed:Connect(function()
-				if input.UserInputState == Enum.UserInputState.End then
-					dragging = false
-					conn:Disconnect()
-				end
-			end)
-		end
-	end)
-
-	UserInputService.InputChanged:Connect(function(input)
-		if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-			update(input)
-		end
-	end)
-end
-
+                RenderStepped:Wait();
+            end;
+        end;
+    end)
+end;
 
 function Library:AddToolTip(InfoStr, HoverInstance)
     local X, Y = Library:GetTextBounds(InfoStr, Library.Font, 14);
@@ -377,15 +351,6 @@ function Library:RemoveFromRegistry(Instance)
         Library.RegistryMap[Instance] = nil;
     end;
 end;
-function Library:AdjustForDevice()
-    if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
-        local scale = Instance.new("UIScale")
-        scale.Scale = 0.85
-        scale.Parent = Library.ScreenGui
-    end
-end
-
-Library:AdjustForDevice()
 
 function Library:UpdateColorsUsingRegistry()
     -- TODO: Could have an 'active' list of objects
@@ -554,7 +519,7 @@ do
             Size = UDim2.new(0, 6, 0, 6);
             BackgroundTransparency = 1;
             Image = 'http://www.roblox.com/asset/?id=9619665977';
-            ImageColor3 = Color3.new(1, 1, 1);
+            ImageColor3 = Color3.new(0, 0, 0);
             ZIndex = 19;
             Parent = SatVibMap;
         });

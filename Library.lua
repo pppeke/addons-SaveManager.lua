@@ -41,7 +41,7 @@ local Library = {
 
     OpenedFrames = {};
     DependencyBoxes = {};
-
+a
     Signals = {};
     ScreenGui = ScreenGui;
 };
@@ -1063,7 +1063,7 @@ do
 
         local ModeSelectOuter = Library:Create('Frame', {
             BorderColor3 = Color3.new(0, 0, 0);
-            Position = UDim2.fromOffset(ToggleLabel.AbsolutePosition.X, ToggleLabel.AbsolutePosition.Y + 1);
+            Position = UDim2.fromOffset(ToggleLabel.AbsolutePosition.X + ToggleLabel.AbsoluteSize.X + 4, ToggleLabel.AbsolutePosition.Y + 1);
             Size = UDim2.new(0, 60, 0, 45 + 2);
             Visible = false;
             ZIndex = 14;

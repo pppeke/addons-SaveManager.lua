@@ -2894,60 +2894,38 @@ function Library:CreateWindow(...)
     local Config = { AnchorPoint = Vector2.zero }
 
     if type(...) == 'table' then
-        Config = ...
+        Config = ...;
     else
         Config.Title = Arguments[1]
-        Config.AutoShow = Arguments[2] or false
+        Config.AutoShow = Arguments[2] or false;
     end
 
     if type(Config.Title) ~= 'string' then Config.Title = 'No title' end
     if type(Config.TabPadding) ~= 'number' then Config.TabPadding = 0 end
     if type(Config.MenuFadeTime) ~= 'number' then Config.MenuFadeTime = 0.2 end
 
-    local Camera = workspace.CurrentCamera or workspace:WaitForChild("Camera")
-    local Viewport = Camera.ViewportSize
+    if typeof(Config.Position) ~= 'UDim2' then Config.Position = UDim2.fromOffset(175, 50) end
+    if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(560, 420) end
 
-    if typeof(Config.Position) ~= 'UDim2' then
+    if Config.Center then
+        Config.AnchorPoint = Vector2.new(0.5, 0.5)
         Config.Position = UDim2.fromScale(0.5, 0.5)
     end
 
-    if typeof(Config.Size) ~= 'UDim2' then
-        if Viewport.X < 800 then
-            Config.Size = UDim2.new(0.8, 0, 0.8, 0)
-        else
-            Config.Size = UDim2.new(0.4, 0, 0.6, 0)
-        end
-    end
-
-    Config.AnchorPoint = Vector2.new(0.5, 0.5)
-
     local Window = {
-        Tabs = {}
-    }
+        Tabs = {};
+    };
 
-    local Outer = Library:Create("Frame", {
+    local Outer = Library:Create('Frame', {
         AnchorPoint = Config.AnchorPoint,
-        BackgroundColor3 = Color3.new(0, 0, 0),
-        BorderSizePixel = 0,
+        BackgroundColor3 = Color3.new(0, 0, 0);
+        BorderSizePixel = 0;
         Position = Config.Position,
         Size = Config.Size,
-        Visible = true,
-        ZIndex = 1,
-        Parent = ScreenGui
-    })
-
-    Camera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
-        local Size = Camera.ViewportSize
-        if Size.X < 800 then
-            Outer.Size = UDim2.new(0.8, 0, 0.8, 0)
-        else
-            Outer.Size = UDim2.new(0.4, 0, 0.6, 0)
-        end
-    end)
-
-    return Window
-end
-
+        Visible = false;
+        ZIndex = 1;
+        Parent = ScreenGui;
+    });
 
     Library:MakeDraggable(Outer, 25);
 

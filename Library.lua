@@ -2904,11 +2904,16 @@ function Library:CreateWindow(...)
     if type(Config.TabPadding) ~= 'number' then Config.TabPadding = 0 end
     if type(Config.MenuFadeTime) ~= 'number' then Config.MenuFadeTime = 0.2 end
 
-    if typeof(Config.Position) ~= 'UDim2' then Config.Position = UDim2.fromScale(0.5, 0.5) end
+    local Camera = workspace.CurrentCamera or workspace:WaitForChild("Camera")
+    local Viewport = Camera.ViewportSize
+
+    if typeof(Config.Position) ~= 'UDim2' then
+        Config.Position = UDim2.fromScale(0.5, 0.5)
+    end
+
     if typeof(Config.Size) ~= 'UDim2' then
-        local viewport = workspace.CurrentCamera.ViewportSize
-        if viewport.X < 800 then
-            Config.Size = UDim2.new(0.7, 0, 0.7, 0)
+        if Viewport.X < 800 then
+            Config.Size = UDim2.new(0.8, 0, 0.8, 0)
         else
             Config.Size = UDim2.new(0.4, 0, 0.6, 0)
         end
@@ -2920,16 +2925,27 @@ function Library:CreateWindow(...)
         Tabs = {}
     }
 
-    local Outer = Library:Create('Frame', {
+    local Outer = Library:Create("Frame", {
         AnchorPoint = Config.AnchorPoint,
         BackgroundColor3 = Color3.new(0, 0, 0),
         BorderSizePixel = 0,
         Position = Config.Position,
         Size = Config.Size,
-        Visible = false,
+        Visible = true,
         ZIndex = 1,
         Parent = ScreenGui
     })
+
+    Camera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+        local Size = Camera.ViewportSize
+        if Size.X < 800 then
+            Outer.Size = UDim2.new(0.8, 0, 0.8, 0)
+        else
+            Outer.Size = UDim2.new(0.4, 0, 0.6, 0)
+        end
+    end)
+
+    return Window
 end
 
 

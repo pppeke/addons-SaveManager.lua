@@ -2905,12 +2905,7 @@ function Library:CreateWindow(...)
     if type(Config.MenuFadeTime) ~= 'number' then Config.MenuFadeTime = 0.2 end
 
     if typeof(Config.Position) ~= 'UDim2' then Config.Position = UDim2.fromOffset(175, 50) end
-    local UserInputService = game:GetService("UserInputService")
-    local isMobile = UserInputService.TouchEnabled and not (UserInputService.MouseEnabled or UserInputService.KeyboardEnabled)
-    if typeof(Config.Size) ~= 'UDim2' then 
-        Config.Size = isMobile and UDim2.fromScale(0.9, 0.7) or UDim2.fromOffset(460, 540)
-    end
-    end
+    if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(420, 420) end
 
     if Config.Center then
         Config.AnchorPoint = Vector2.new(0.5, 0.5)

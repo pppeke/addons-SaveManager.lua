@@ -6024,6 +6024,7 @@ do
         Size = UDim2.new(1, -4, 1, 0);
         TextSize = 14;
         TextXAlignment = Enum.TextXAlignment.Left;
+        TextColor3 = Library.TitleColor or Color3.new(255, 255, 1); -- <--- this sets the color
         ZIndex = 203;
         Parent = InnerFrame;
     })

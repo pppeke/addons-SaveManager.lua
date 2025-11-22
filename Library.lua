@@ -2040,7 +2040,7 @@ do
             Font = Library.Font;
             PlaceholderColor3 = Color3.fromRGB(190, 190, 190);
             PlaceholderText = 'Hex color',
-            Text = '#FFFFFF',
+            Text = '#000000',
             TextColor3 = Library.FontColor;
             TextSize = 14;
             TextStrokeTransparency = 0;

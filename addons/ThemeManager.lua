@@ -1,4 +1,3 @@
-
 local cloneref = (cloneref or clonereference or function(instance: any) return instance end)
 local httpService = cloneref(game:GetService('HttpService'))
 local httprequest = (syn and syn.request) or request or http_request or (http and http.request)
@@ -11,8 +10,6 @@ local assert = function(condition, errorMessage)
 end
 
 if typeof(copyfunction) == "function" then
-    -- Fix is_____ functions for shitsploits, those functions should never error, only return a boolean.
-
     local
         isfolder_copy,
         isfile_copy,
@@ -42,7 +39,6 @@ end
 
 local ThemeManager = {} do
 	ThemeManager.Folder = 'LinoriaLibSettings'
-	-- if not isfolder(ThemeManager.Folder) then makefolder(ThemeManager.Folder) end
 
 	ThemeManager.Library = nil
 	ThemeManager.BuiltInThemes = {
@@ -64,13 +60,11 @@ local ThemeManager = {} do
 			not (ThemeManager.Library and ThemeManager.Library.InnerVideoBackground)
 		then return; end;
 
-		--// Variables \\--
 		local videoInstance = ThemeManager.Library.InnerVideoBackground;
 		local extension = videoLink:match(".*/(.-)?") or videoLink:match(".*/(.-)$"); extension = tostring(extension);
 		local filename = string.sub(extension, 0, -6);
-		local _, domain = videoLink:match("^(https?://)([^/]+)"); domain = tostring(domain); -- _ is protocol
+		local _, domain = videoLink:match("^(https?://)([^/]+)"); domain = tostring(domain);
 
-		--// Check URL \\--
 		if videoLink == "" then
 			videoInstance:Pause();
 			videoInstance.Video = "";
@@ -79,7 +73,6 @@ local ThemeManager = {} do
 		end
 		if #extension > 5 and string.sub(extension, -5) ~= ".webm" then return; end;
 
-		--// Fetch Video Data \\--
 		local videoFile = ThemeManager.Folder .. "/themes/" .. string.gsub(domain .. filename, 0, 249) .. ".webm";
 		if not isfile(videoFile) then
 			local success, requestRes = pcall(httprequest, { Url = videoLink, Method = 'GET' })
@@ -88,7 +81,6 @@ local ThemeManager = {} do
 			writefile(videoFile, requestRes.Body)
 		end
 
-		--// Play Video \\--
 		videoInstance.Video = getassetfunc(videoFile);
 		videoInstance.Visible = true;
 		videoInstance:Play();
@@ -98,7 +90,6 @@ local ThemeManager = {} do
 		self.Library = library
 	end
 
-	--// Folders \\--
 	function ThemeManager:GetPaths()
 	    local paths = {}
 
@@ -134,33 +125,27 @@ local ThemeManager = {} do
 		self:BuildFolderTree()
 	end
 	
-	--// Apply, Update theme \\--
 	function ThemeManager:ApplyTheme(theme)
 		local customThemeData = self:GetCustomTheme(theme)
 		local data = customThemeData or self.BuiltInThemes[theme]
-
 		if not data then return end
 
-		-- custom themes are just regular dictionaries instead of an array with { index, dictionary }
 		if self.Library.InnerVideoBackground ~= nil then
 			self.Library.InnerVideoBackground.Visible = false
 		end
-		
+
 		local scheme = data[2]
 		for idx, col in next, customThemeData or scheme do
 			if idx == "VideoLink" then
 				self.Library[idx] = col
-				
 				if self.Library.Options[idx] then
-					self.Library.Options[idx]:SetValue(col)
+					self.Library.Options[idx]:SetValue(col, true)
 				end
-				
 				ApplyBackgroundVideo(col)
 			else
 				self.Library[idx] = Color3.fromHex(col)
-				
 				if self.Library.Options[idx] then
-					self.Library.Options[idx]:SetValueRGB(Color3.fromHex(col))
+					self.Library.Options[idx]:SetValueRGB(Color3.fromHex(col), true)
 				end
 			end
 		end
@@ -169,27 +154,25 @@ local ThemeManager = {} do
 	end
 
 	function ThemeManager:ThemeUpdate()
-		-- This allows us to force apply themes without loading the themes tab :)
 		if self.Library.InnerVideoBackground ~= nil then
 			self.Library.InnerVideoBackground.Visible = false
 		end
 
 		local options = { "FontColor", "MainColor", "AccentColor", "BackgroundColor", "OutlineColor", "VideoLink" }
-		for i, field in next, options do
+		for _, field in next, options do
 			if self.Library.Options and self.Library.Options[field] then
 				self.Library[field] = self.Library.Options[field].Value
-
-				if field == "VideoLink" then
-					ApplyBackgroundVideo(self.Library.Options[field].Value)
-				end
 			end
+		end
+
+		if self.Library.Options.VideoLink then
+			ApplyBackgroundVideo(self.Library.Options.VideoLink.Value)
 		end
 
 		self.Library.AccentColorDark = self.Library:GetDarkerColor(self.Library.AccentColor);
 		self.Library:UpdateColorsUsingRegistry()
 	end
 
-	--// Get, Load, Save, Delete, Refresh \\--
 	function ThemeManager:GetCustomTheme(file)
 		local path = self.Folder .. '/themes/' .. file .. '.json'
 		if not isfile(path) then
@@ -223,7 +206,7 @@ local ThemeManager = {} do
 		end
 
 		if isDefault then
-			self.Library.Options.ThemeManager_ThemeList:SetValue(theme)
+			self.Library.Options.ThemeManager_ThemeList:SetValue(theme, true)
 		else
 			self:ApplyTheme(theme)
 		end
@@ -273,8 +256,6 @@ local ThemeManager = {} do
 		for i = 1, #list do
 			local file = list[i]
 			if file:sub(-5) == '.json' then
-				-- i hate this but it has to be done ...
-
 				local pos = file:find('.json', 1, true)
 				local start = pos
 
@@ -293,7 +274,6 @@ local ThemeManager = {} do
 		return out
 	end
 
-	--// GUI \\--
 	function ThemeManager:CreateThemeManager(groupbox)
 		groupbox:AddLabel('Background color'):AddColorPicker('BackgroundColor', { Default = self.Library.BackgroundColor });
 		groupbox:AddLabel('Main color')	:AddColorPicker('MainColor', { Default = self.Library.MainColor });

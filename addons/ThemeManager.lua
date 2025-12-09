@@ -54,13 +54,65 @@ local ThemeManager = {} do
 
 	ThemeManager.Library = nil
 	ThemeManager.BuiltInThemes = {
-		['Default'] = { 1, { FontColor = "ffffff", MainColor = "141414", AccentColor = "ff69b4", BackgroundColor = "1c1c1c", OutlineColor = "323232" } },
-		['Fatality']      = { 3, { FontColor = "ffffff", MainColor = "1e1842", AccentColor = "c50754", BackgroundColor = "191335", OutlineColor = "3c355d" } },
-		['Jester']        = { 4, { FontColor = "ffffff", MainColor = "242424", AccentColor = "db4467", BackgroundColor = "1c1c1c", OutlineColor = "373737" } },
-		['Mint']          = { 5, { FontColor = "ffffff", MainColor = "242424", AccentColor = "3db488", BackgroundColor = "1c1c1c", OutlineColor = "373737" } },
-		['Tokyo Night']   = { 6, { FontColor = "ffffff", MainColor = "191925", AccentColor = "6759b3", BackgroundColor = "16161f", OutlineColor = "323232" } },
-		['Ubuntu']        = { 7, { FontColor = "ffffff", MainColor = "3e3e3e", AccentColor = "e2581e", BackgroundColor = "323232", OutlineColor = "191919" } },
-		['Quartz']        = { 8, { FontColor = "ffffff", MainColor = "232330", AccentColor = "426e87", BackgroundColor = "1d1b26", OutlineColor = "27232f" } },
+		Themes = {
+    ['Default'] = { 1, { 
+        FontColor = "ffffff",
+        MainColor = "141414",
+        AccentColor = "ff69b4",
+        BackgroundColor = "1c1c1c",
+        OutlineColor = "323232"
+    }},
+
+    -- Custom Renamed + Recolored
+    ['Crimson Blade'] = { 3, { 
+        FontColor = "ffffff",
+        MainColor = "2a0e12",
+        AccentColor = "d12a3e",
+        BackgroundColor = "1a080b",
+        OutlineColor = "4a1b20"
+    }},
+
+    ['Neon Carnival'] = { 4, {
+        FontColor = "ffffff",
+        MainColor = "1e1b2e",
+        AccentColor = "ff2ebd",
+        BackgroundColor = "181625",
+        OutlineColor = "3b3754"
+    }},
+
+    ['Frostbyte Mint'] = { 5, {
+        FontColor = "ffffff",
+        MainColor = "1c2e28",
+        AccentColor = "4cfccc",
+        BackgroundColor = "162520",
+        OutlineColor = "2f4a41"
+    }},
+
+    ['Midnight Horizon'] = { 6, {
+        FontColor = "ffffff",
+        MainColor = "11121d",
+        AccentColor = "7266ff",
+        BackgroundColor = "0d0e17",
+        OutlineColor = "292a3a"
+    }},
+
+    ['Auburn Forge'] = { 7, {
+        FontColor = "ffffff",
+        MainColor = "4a2d22",
+        AccentColor = "ff6b2d",
+        BackgroundColor = "3a231b",
+        OutlineColor = "1c0f0b"
+    }},
+
+    ['Moonstone'] = { 8, {
+        FontColor = "ffffff",
+        MainColor = "1d1e2d",
+        AccentColor = "5ba4d8",
+        BackgroundColor = "171823",
+        OutlineColor = "262738"
+    }},
+}
+
 	}
 
 	function ApplyBackgroundVideo(videoLink)

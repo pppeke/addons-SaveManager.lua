@@ -3054,25 +3054,56 @@ function Library:CreateWindow(...)
         BorderColor3 = 'OutlineColor';
     });
 
-    function Window:SetWindowTitle(Title)
-        WindowLabel.Text = Title;
-    end;
+    function Window:AddTab(Name, IconId)
+    local Tab = {
+        Groupboxes = {};
+        Tabboxes = {};
+    };
 
-    function Window:AddTab(Name)
-        local Tab = {
-            Groupboxes = {};
-            Tabboxes = {};
-        };
+    local TabButtonWidth = Library:GetTextBounds(Name, Library.Font, 16);
 
-        local TabButtonWidth = Library:GetTextBounds(Name, Library.Font, 16);
+    local Padding = 8
+    local IconSize = 16
+    local Spacing = 4
 
-        local TabButton = Library:Create('Frame', {
-            BackgroundColor3 = Library.BackgroundColor;
-            BorderColor3 = Library.OutlineColor;
-            Size = UDim2.new(0, TabButtonWidth + 8 + 4, 1, 0);
-            ZIndex = 1;
-            Parent = TabArea;
+    local TotalWidth = TabButtonWidth + Padding + 4
+    if IconId then
+        TotalWidth = TotalWidth + IconSize + Spacing
+    end
+
+    local TabButton = Library:Create('Frame', {
+        BackgroundColor3 = Library.BackgroundColor;
+        BorderColor3 = Library.OutlineColor;
+        Size = UDim2.new(0, TotalWidth, 1, 0);
+        ZIndex = 1;
+        Parent = TabArea;
+    });
+
+    -- add icon if provided
+    if IconId then
+        local Icon = Library:Create('ImageLabel', {
+            BackgroundTransparency = 1;
+            Image = IconId; -- e.g. "rbxassetid://123456"
+            Size = UDim2.new(0, IconSize, 0, IconSize);
+            Position = UDim2.new(0, 4, 0.5, -IconSize/2);
+            Parent = TabButton;
         });
+    end
+
+    -- text label
+    local Label = Library:Create('TextLabel', {
+        BackgroundTransparency = 1;
+        Text = Name;
+        Font = Library.Font;
+        TextSize = 16;
+        TextColor3 = Library.FontColor;
+        Position = UDim2.new(0, IconId and (IconSize + Spacing + 4) or 4, 0, 0);
+        Size = UDim2.new(1, -4, 1, 0);
+        Parent = TabButton;
+    });
+
+    return Tab
+end
 
         Library:AddToRegistry(TabButton, {
             BackgroundColor3 = 'BackgroundColor';

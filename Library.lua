@@ -3054,7 +3054,11 @@ function Library:CreateWindow(...)
         BorderColor3 = 'OutlineColor';
     });
 
-    function Window:AddTab(Name, IconId)
+    function Window:SetWindowTitle(Title)
+    WindowLabel.Text = Title;
+end;
+
+function Window:AddTab(Name, Icon, Color2)
     local Tab = {
         Groupboxes = {};
         Tabboxes = {};
@@ -3062,48 +3066,38 @@ function Library:CreateWindow(...)
 
     local TabButtonWidth = Library:GetTextBounds(Name, Library.Font, 16);
 
-    local Padding = 8
-    local IconSize = 16
-    local Spacing = 4
-
-    local TotalWidth = TabButtonWidth + Padding + 4
-    if IconId then
-        TotalWidth = TotalWidth + IconSize + Spacing
-    end
-
     local TabButton = Library:Create('Frame', {
         BackgroundColor3 = Library.BackgroundColor;
         BorderColor3 = Library.OutlineColor;
-        Size = UDim2.new(0, TotalWidth, 1, 0);
+        Size = UDim2.new(0, TabButtonWidth + 8 + 4 + (Icon and 20 or 0), 1, 0);
         ZIndex = 1;
         Parent = TabArea;
     });
 
-    -- add icon if provided
-    if IconId then
-        local Icon = Library:Create('ImageLabel', {
+    -- OPTIONAL second color (gradient)
+    if Color2 then
+        local Gradient = Instance.new("UIGradient");
+        Gradient.Color = ColorSequence.new{
+            ColorSequenceKeypoint.new(0, Library.BackgroundColor),
+            ColorSequenceKeypoint.new(1, Color2)
+        };
+        Gradient.Parent = TabButton;
+    end;
+
+    -- OPTIONAL icon
+    if Icon then
+        local IconLabel = Library:Create('ImageLabel', {
             BackgroundTransparency = 1;
-            Image = IconId; -- e.g. "rbxassetid://123456"
-            Size = UDim2.new(0, IconSize, 0, IconSize);
-            Position = UDim2.new(0, 4, 0.5, -IconSize/2);
+            Image = Icon;
+            Size = UDim2.new(0, 16, 0, 16);
+            Position = UDim2.new(0, 4, 0.5, -8);
             Parent = TabButton;
         });
-    end
+    end;
 
-    -- text label
-    local Label = Library:Create('TextLabel', {
-        BackgroundTransparency = 1;
-        Text = Name;
-        Font = Library.Font;
-        TextSize = 16;
-        TextColor3 = Library.FontColor;
-        Position = UDim2.new(0, IconId and (IconSize + Spacing + 4) or 4, 0, 0);
-        Size = UDim2.new(1, -4, 1, 0);
-        Parent = TabButton;
-    });
+    return Tab;
+end;
 
-    return Tab
-end
 
         Library:AddToRegistry(TabButton, {
             BackgroundColor3 = 'BackgroundColor';

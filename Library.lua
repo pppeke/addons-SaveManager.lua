@@ -3054,49 +3054,25 @@ function Library:CreateWindow(...)
         BorderColor3 = 'OutlineColor';
     });
 
-    function Window:SetWindowTitle(Title)
-    WindowLabel.Text = Title;
-end;
+     function Window:SetWindowTitle(Title)
+        WindowLabel.Text = Title;
+    end;
 
-function Window:AddTab(Name, Icon, Color2)
-    local Tab = {
-        Groupboxes = {};
-        Tabboxes = {};
-    };
-
-    local TabButtonWidth = Library:GetTextBounds(Name, Library.Font, 16);
-
-    local TabButton = Library:Create('Frame', {
-        BackgroundColor3 = Library.BackgroundColor;
-        BorderColor3 = Library.OutlineColor;
-        Size = UDim2.new(0, TabButtonWidth + 8 + 4 + (Icon and 20 or 0), 1, 0);
-        ZIndex = 1;
-        Parent = TabArea;
-    });
-
-    -- OPTIONAL second color (gradient)
-    if Color2 then
-        local Gradient = Instance.new("UIGradient");
-        Gradient.Color = ColorSequence.new{
-            ColorSequenceKeypoint.new(0, Library.BackgroundColor),
-            ColorSequenceKeypoint.new(1, Color2)
+    function Window:AddTab(Name)
+        local Tab = {
+            Groupboxes = {};
+            Tabboxes = {};
         };
-        Gradient.Parent = TabButton;
-    end;
 
-    -- OPTIONAL icon
-    if Icon then
-        local IconLabel = Library:Create('ImageLabel', {
-            BackgroundTransparency = 1;
-            Image = Icon;
-            Size = UDim2.new(0, 16, 0, 16);
-            Position = UDim2.new(0, 4, 0.5, -8);
-            Parent = TabButton;
-        });
-    end;
+        local TabButtonWidth = Library:GetTextBounds(Name, Library.Font, 16);
 
-    return Tab;
-end;
+        local TabButton = Library:Create('Frame', {
+            BackgroundColor3 = Library.BackgroundColor;
+            BorderColor3 = Library.OutlineColor;
+            Size = UDim2.new(0, TabButtonWidth + 8 + 4, 1, 0);
+            ZIndex = 1;
+            Parent = TabArea;
+        }); 
 
 
         Library:AddToRegistry(TabButton, {

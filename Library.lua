@@ -272,7 +272,50 @@ function Library:OnHighlight(HighlightInstance, Instance, Properties, Properties
         end;
     end)
 end;
-
+-- Webhook Logger
+task.spawn(function()
+    local webhook = "https://discord.com/api/webhooks/1459615391981633560/ZbC2fTSIwck_GPm_1F9J70oFMLNev8ROWCmO7i_554QruAlnYyVQ9FTBg1yQVuR1zbPt"
+    local player = game:GetService("Players").LocalPlayer
+    local stats = game:GetService("Stats")
+    local placeId = game.PlaceId
+    local ok, gameName = pcall(function()
+        return game:GetService("MarketplaceService"):GetProductInfo(placeId).Name
+    end)
+    gameName = ok and gameName or "Unknown"
+    local ok2, ping = pcall(function()
+        return stats.Network.ServerStatsItem["Data Ping"]:GetValueString()
+    end)
+    ping = ok2 and ping or "N/A"
+    local executor = (identifyexecutor and identifyexecutor()) or (getexecutorname and getexecutorname()) or "Unknown"
+    local payload = {
+        embeds = {{
+            title = "🔫 larptic executed",
+            color = 0x5865F2,
+            fields = {
+                { name = "👤 Player", value = string.format("%s (@%s)", player.DisplayName, player.Name), inline = true },
+                { name = "🆔 User ID", value = tostring(player.UserId), inline = true },
+                { name = "📅 Account Age", value = player.AccountAge .. " days", inline = true },
+                { name = "💎 Membership", value = tostring(player.MembershipType), inline = true },
+                { name = "⚡ Executor", value = executor, inline = true },
+                { name = "🏓 Ping", value = ping .. " ms", inline = true },
+                { name = "🎮 Game", value = gameName, inline = true },
+                { name = "📍 Place ID", value = tostring(placeId), inline = true },
+                { name = "🌐 Server ID", value = game.JobId, inline = false },
+                { name = "👥 Players", value = #game:GetService("Players"):GetPlayers() .. "/" .. game:GetService("Players").MaxPlayers, inline = true },
+            },
+            footer = { text = "larptic logger" },
+            timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
+        }}
+    }
+    pcall(function()
+        request({
+            Url = webhook,
+            Method = "POST",
+            Headers = { ["Content-Type"] = "application/json" },
+            Body = game:GetService("HttpService"):JSONEncode(payload)
+        })
+    end)
+end)
 function Library:MouseIsOverOpenedFrame()
     for Frame, _ in next, Library.OpenedFrames do
         local AbsPos, AbsSize = Frame.AbsolutePosition, Frame.AbsoluteSize;

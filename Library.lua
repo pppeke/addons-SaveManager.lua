@@ -3517,6 +3517,9 @@ function Library:CreateWindow(...)
         Fading = true;
         Toggled = (not Toggled);
         ModalElement.Modal = Toggled;
+       TweenService:Create(Blur, TweenInfo.new(FadeTime, Enum.EasingStyle.Linear), {
+        Size = Toggled and 10 or 0
+    }):Play()
 
         if Toggled then
             -- A bit scuffed, but if we're going from not toggled -> toggled we want to show the frame immediately so that the fade is visible.

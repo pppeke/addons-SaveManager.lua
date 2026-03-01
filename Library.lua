@@ -2680,13 +2680,13 @@ end;
 
 -- < Create other UI elements >
 do
-    Library.NotificationArea = Library:Create('Frame', {
-        BackgroundTransparency = 1;
-        Position = UDim2.new(0, 0, 0, 40);
-        Size = UDim2.new(0, 300, 0, 200);
-        ZIndex = 100;
-        Parent = ScreenGui;
-    });
+   Library.NotificationArea = Library:Create('Frame', {
+    BackgroundTransparency = 1;
+    Position = UDim2.new(0.5, -150, 0, 40);
+    Size = UDim2.new(0, 300, 0, 200);
+    ZIndex = 100;
+    Parent = ScreenGui;
+});
 
     Library:Create('UIListLayout', {
         Padding = UDim.new(0, 4);
@@ -2847,13 +2847,14 @@ function Library:Notify(Text, Time)
     YSize = YSize + 7
 
     local NotifyOuter = Library:Create('Frame', {
-        BorderColor3 = Color3.new(0, 0, 0);
-        Position = UDim2.new(0, 100, 0, 10);
-        Size = UDim2.new(0, 0, 0, YSize);
-        ClipsDescendants = true;
-        ZIndex = 100;
-        Parent = Library.NotificationArea;
-    });
+    BorderColor3 = Color3.new(0, 0, 0);
+    Position = UDim2.new(0.5, 0, 0, 10);
+    AnchorPoint = Vector2.new(0.5, 0);
+    Size = UDim2.new(0, 0, 0, YSize);
+    ClipsDescendants = true;
+    ZIndex = 100;
+    Parent = Library.NotificationArea;
+});
 
     local NotifyInner = Library:Create('Frame', {
         BackgroundColor3 = Library.MainColor;

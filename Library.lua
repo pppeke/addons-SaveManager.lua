@@ -175,12 +175,6 @@ function Library:MakeDraggable(Instance, Cutoff)
                 return;
             end;
 
-            -- Find and hide the main content, keep outer shell visible
-            local Inner = Instance:FindFirstChildWhichIsA('Frame');
-            if Inner then
-                Inner.Visible = false;
-            end;
-
             while InputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
                 Instance.Position = UDim2.new(
                     0,
@@ -189,12 +183,7 @@ function Library:MakeDraggable(Instance, Cutoff)
                     Mouse.Y - ObjPos.Y + (Instance.Size.Y.Offset * Instance.AnchorPoint.Y)
                 );
 
-                RunService.Heartbeat:Wait();
-            end;
-
-            -- Restore after drag
-            if Inner then
-                Inner.Visible = true;
+                RenderStepped:Wait();
             end;
         end;
     end)

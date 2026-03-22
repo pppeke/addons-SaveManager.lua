@@ -1197,7 +1197,8 @@ do
 
             ContainerLabel.Text = string.format('[%s] %s (%s)', KeyPicker.Value, Info.Text, KeyPicker.Mode);
 
-            ContainerLabel.Visible = State;
+            local ParentValue = ParentObj.Type == 'Toggle' and ParentObj.Value or State
+ContainerLabel.Visible = ParentValue
             ContainerLabel.TextColor3 = State and Library.AccentColor or Library.FontColor;
 
             Library.RegistryMap[ContainerLabel].Properties.TextColor3 = State and 'AccentColor' or 'FontColor';
